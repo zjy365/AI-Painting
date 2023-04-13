@@ -1,5 +1,8 @@
+import { Box } from '@chakra-ui/react'
+import NavBar from '@/components/navbar'
+
 function Index() {
-  return <div>index</div>
+  return <Box></Box>
 }
 
 export default Index
