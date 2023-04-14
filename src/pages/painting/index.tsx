@@ -55,8 +55,6 @@ function Painting() {
     imageMutation.mutate()
   }
 
-  console.log(data?.data?.models)
-
   return (
     <Flex
       h="100%"
@@ -72,7 +70,6 @@ function Painting() {
         w="382px"
         flexDirection={'column'}
         alignItems={'center'}
-        minH={'740px'}
         bg="primary_black.100"
         borderWidth={'1px'}
         borderColor={'primary_black.400'}
@@ -107,8 +104,6 @@ function Painting() {
         p="24px"
         w="382px"
         flexDirection={'column'}
-        // alignItems={'center'}
-        minH={'740px'}
         bg="primary_black.100"
         borderWidth={'1px'}
         borderColor={'primary_black.400'}
