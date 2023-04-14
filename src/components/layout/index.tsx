@@ -1,7 +1,16 @@
 import NavBar from '@/components/navbar'
-import { Box } from '@chakra-ui/react'
+import { Box, useColorMode } from '@chakra-ui/react'
+import { useEffect } from 'react'
 
 function Layout({ children }: { children: any }) {
+  const { colorMode, toggleColorMode, setColorMode } = useColorMode()
+
+  useEffect(() => {
+    if (colorMode !== 'dark') {
+      setColorMode('dark')
+    }
+  }, [colorMode, setColorMode])
+
   return (
     <>
       <NavBar></NavBar>

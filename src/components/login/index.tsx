@@ -1,7 +1,12 @@
 import request from '@/service/request'
 import {
+  Box,
   Button,
   Input,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -10,13 +15,15 @@ import {
   ModalOverlay,
   useDisclosure,
 } from '@chakra-ui/react'
-import { SetStateAction, useState } from 'react'
+import { SetStateAction, useEffect, useState } from 'react'
 import { setToken } from '@/utils/auth'
 
 function Login() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [userInfo, setUserInfo] = useState('')
+  const [isLogin, setIsLogin] = useState(false)
 
   const handleUsernameChange = (event: {
     target: { value: SetStateAction<string> }
@@ -42,44 +49,43 @@ function Login() {
       setToken(token)
     } catch (error) {}
   }
-
   const checkLoginStatus = async () => {
     try {
       const res = await request.get('/api/login_status')
       console.log(res)
+      setIsLogin(res.data.loggedIn)
+      setUserInfo(res.data.username)
     } catch (error) {}
   }
 
-  //   function () {
-  //     $.ajax({
-  //         url: 'https://zbvrsg.laf.dev/login_status',
-  //         type: 'GET',
-  //         headers: {
-  //             'jwt-token': document.cookie.replace(/(?:(?:^|.*;\s*)jwt-token\s*\=\s*([^;]*).*$)|^.*$/, "$1")
-  //         },
-  //         success: function (response) {
-  //             if (response.loggedIn) {
-  //                 $('#user_name').text(response.username).show();
-  //                 $('#login_button').hide();
-  //                 getPreImages();
-  //             } else {
-  //                 $('#user_name').hide();
-  //                 $('#login_button').show();
-  //             }
-  //         }
-  //     });
-  // }
+  useEffect(() => {
+    checkLoginStatus()
+  }, [])
 
   return (
     <>
-      <Button
-        onClick={onOpen}
-        colorScheme="blue"
-        size="sm"
-        w="80px"
-        borderRadius={'24px'}>
-        登录
-      </Button>
+      {isLogin ? (
+        <Menu>
+          <MenuButton as={Button}>Actions</MenuButton>
+          <MenuList>
+            <MenuItem>Download</MenuItem>
+            <MenuItem>Create a Copy</MenuItem>
+            <MenuItem>Mark as Draft</MenuItem>
+            <MenuItem>Delete</MenuItem>
+            <MenuItem>Attend a Workshop</MenuItem>
+          </MenuList>
+        </Menu>
+      ) : (
+        <Button
+          onClick={onOpen}
+          colorScheme="blue"
+          size="sm"
+          w="80px"
+          borderRadius={'24px'}>
+          登录
+        </Button>
+      )}
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent bgColor={'#2b2b2b'}>
