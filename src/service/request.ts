@@ -7,7 +7,7 @@ import axios, {
 } from 'axios'
 
 const request = axios.create({
-  // baseURL:,
+  baseURL: 'https://zbvrsg.laf.dev',
   withCredentials: true,
   timeout: 30000,
 })
@@ -21,6 +21,10 @@ request.interceptors.request.use(
     if (getToken()) {
       _headers['jwt-token'] = getToken()
     }
+
+    // if (process.env.NODE_ENV === 'development') {
+    //   config.url = '/api' + config.url
+    // }
 
     if (!config.headers || config.headers['Content-Type'] === '') {
       _headers['Content-Type'] = 'application/json'

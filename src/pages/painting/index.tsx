@@ -20,15 +20,11 @@ function Painting() {
   const [negativePrompt, setNegativePrompt] = useState('')
   const [model, setModel] = useState('None')
 
-  const { data } = useQuery(['getModalList'], () => request('/api/model_list'))
+  const { data } = useQuery(['getModalList'], () => request('/model_list'))
 
-  const { data: Images } = useQuery(
-    ['getImages'],
-    () => request('/api/images'),
-    {
-      refetchInterval: 10000,
-    }
-  )
+  const { data: Images } = useQuery(['getImages'], () => request('/images'), {
+    refetchInterval: 10000,
+  })
   console.log(Images)
 
   const onChangePrompt = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -40,7 +36,7 @@ function Painting() {
   }
 
   const imageMutation = useMutation(['generImage'], () =>
-    request.post('/api/generate', {
+    request.post('/generate', {
       prompt: prompt,
       negative_prompt: negativePrompt,
       model: model,

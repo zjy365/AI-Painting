@@ -41,7 +41,7 @@ function Login() {
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault()
     try {
-      const res = await request.post('/api/login', {
+      const res = await request.post('/login', {
         username,
         password,
       })
@@ -60,7 +60,7 @@ function Login() {
   }
 
   const { data, refetch, isSuccess } = useQuery(['getLoginStatus'], () =>
-    request.get('/api/login_status')
+    request.get('/login_status')
   )
 
   return (
