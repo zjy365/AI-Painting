@@ -18,13 +18,12 @@ import {
 import { SetStateAction, useEffect, useState } from 'react'
 import { setToken, removeToken } from '@/utils/auth'
 import { useRouter } from 'next/router'
+import { useQuery } from '@tanstack/react-query'
 
 function Login() {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [userInfo, setUserInfo] = useState('')
-  const [isLogin, setIsLogin] = useState(false)
   const router = useRouter()
 
   const handleUsernameChange = (event: {
@@ -50,34 +49,26 @@ function Login() {
       let token = res.data['jwt-token']
       setToken(token)
       onClose()
-      checkLoginStatus()
-    } catch (error) {}
-  }
-
-  const checkLoginStatus = async () => {
-    try {
-      const res = await request.get('/api/login_status')
-      setIsLogin(res.data.loggedIn)
-      setUserInfo(res.data.username)
+      refetch()
     } catch (error) {}
   }
 
   const logOut = () => {
     router.push('/community')
     removeToken()
-    checkLoginStatus()
+    refetch()
   }
 
-  useEffect(() => {
-    checkLoginStatus()
-  }, [])
+  const { data, refetch, isSuccess } = useQuery(['getLoginStatus'], () =>
+    request.get('/api/login_status')
+  )
 
   return (
     <>
-      {isLogin ? (
+      {data?.data?.loggedIn ? (
         <Menu>
           <MenuButton as={Button} justifyContent={'center'}>
-            {userInfo}
+            {data?.data?.username}
           </MenuButton>
           <MenuList>
             <MenuItem onClick={logOut}>退出</MenuItem>

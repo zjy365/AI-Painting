@@ -3,6 +3,13 @@ import { extendTheme } from '@chakra-ui/react'
 const theme = extendTheme({
   initialColorMode: 'light',
   useSystemColorMode: false,
+  styles: {
+    global: {
+      body: {
+        bg: '#262626',
+      },
+    },
+  },
   colors: {
     primary_black: {
       100: '#2d2d2d',
