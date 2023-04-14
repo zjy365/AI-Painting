@@ -9,8 +9,9 @@ const Tabs = {
 }
 
 const Navbar = () => {
-  const [active, setActive] = useState('community')
   const router = useRouter()
+  const [active, setActive] = useState('community')
+
   const onChange = (id: string) => {
     if (id) {
       router.push({ pathname: id })
@@ -19,10 +20,12 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-    if (router.pathname) {
+    if (router.pathname === '/') {
+      setActive('community')
+    } else {
       setActive(router.pathname.replace('/', ''))
     }
-  }, [router])
+  }, [router.pathname])
 
   return (
     <Flex

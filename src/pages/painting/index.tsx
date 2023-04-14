@@ -25,7 +25,6 @@ function Painting() {
   const { data: Images } = useQuery(['getImages'], () => request('/images'), {
     refetchInterval: 10000,
   })
-  console.log(Images)
 
   const onChangePrompt = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPrompt(e.target.value)
@@ -55,6 +54,8 @@ function Painting() {
   const generImage = () => {
     imageMutation.mutate()
   }
+
+  console.log(data?.data?.models)
 
   return (
     <Flex
@@ -87,7 +88,7 @@ function Painting() {
         />
         <Box w="100%" mt="20px">
           <Select onChange={(e) => setModel(e.target.value)}>
-            {data?.data?.models &&
+            {!!data?.data?.models &&
               data?.data?.models?.map((item: any) => {
                 return (
                   <option key={item} value={item}>
@@ -114,7 +115,7 @@ function Painting() {
         borderRadius={'16px'}
         overflowY={'auto'}>
         <UnorderedList>
-          {Images?.data &&
+          {Array.isArray(Images?.data) &&
             Images?.data?.map((item: any) => {
               return (
                 <ListItem key={item?._id} py="4px">
