@@ -1,16 +1,43 @@
+import request from '@/service/request'
 import { Box, Button, Flex, Select, Textarea, Text } from '@chakra-ui/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { debounce } from 'lodash'
 
 function Painting() {
   const [prompt, setPrompt] = useState('')
-  const [negativePrompt, setNegativePromp] = useState('')
-  const [modal, setModal] = useState('')
+  const [negativePrompt, setNegativePrompt] = useState('')
+  const [modal, setModal] = useState('None')
+  const [modalList, setModalList] = useState([])
+
+  const getModalList = async () => {
+    try {
+      const res = await request('/api/model_list')
+      setModalList(res.data.models)
+    } catch (error) {}
+  }
+
+  const generImage = () => {
+    console.log(modal, prompt, negativePrompt)
+  }
+
+  const onChangePrompt = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setPrompt(e.target.value)
+  }
+
+  const onNegativePrompt = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNegativePrompt(e.target.value)
+  }
+
+  useEffect(() => {
+    getModalList()
+  }, [])
 
   return (
-    <Flex h="100%" w="100%">
+    <Flex h="100%" w="100%" bg={'#262626'} pt="61px">
       <Flex
         m="16px"
         p="14px"
+        pt="24px"
         w="382px"
         flexDirection={'column'}
         alignItems={'center'}
@@ -19,17 +46,30 @@ function Painting() {
         borderWidth={'1px'}
         borderColor={'primary_black.400'}
         borderRadius={'16px'}>
-        <Textarea placeholder="Here is a sample placeholder" />
-        <Textarea placeholder="Here is a sample placeholder" />
-        <Box>
-          <Select placeholder="Select option">
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
+        <Textarea
+          placeholder="prompt"
+          onChange={debounce((e) => onChangePrompt(e), 500)}
+        />
+        <Textarea
+          mt="20px"
+          placeholder="negative_prompt"
+          onChange={debounce((e) => onNegativePrompt(e), 500)}
+        />
+        <Box w="100%" mt="20px">
+          <Select onChange={(e) => setModal(e.target.value)}>
+            {modalList &&
+              modalList?.map((item: any) => {
+                return (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                )
+              })}
           </Select>
         </Box>
-        <Button></Button>
-        <Box></Box>
+        <Button mt="20px" w="100%" onClick={generImage}>
+          生成
+        </Button>
       </Flex>
       <Box
         flexGrow={1}
@@ -41,7 +81,7 @@ function Painting() {
       </Box>
 
       <Flex
-        w="120px"
+        w="140px"
         minW="120px"
         minH={'760px'}
         borderLeft={'1px solid #424242'}>

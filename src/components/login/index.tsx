@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { SetStateAction, useEffect, useState } from 'react'
 import { setToken, removeToken } from '@/utils/auth'
+import { useRouter } from 'next/router'
 
 function Login() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -24,6 +25,7 @@ function Login() {
   const [password, setPassword] = useState('')
   const [userInfo, setUserInfo] = useState('')
   const [isLogin, setIsLogin] = useState(false)
+  const router = useRouter()
 
   const handleUsernameChange = (event: {
     target: { value: SetStateAction<string> }
@@ -61,6 +63,7 @@ function Login() {
   }
 
   const logOut = () => {
+    router.push('/community')
     removeToken()
     checkLoginStatus()
   }

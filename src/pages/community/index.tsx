@@ -2,8 +2,8 @@ import { Box } from '@chakra-ui/react'
 
 function Community() {
   return (
-    <div>
-      <Box h="400px">1212</Box>
+    <Box h="100%" bg={'#262626'} mt="61px" overflow={'auto'}>
+      <Box h="400px">adas</Box>
       <Box h="400px"></Box>
       <Box h="400px"></Box>
       <Box h="400px"></Box>
@@ -13,7 +13,7 @@ function Community() {
       <Box h="400px"></Box>
       <Box h="400px"></Box>
       <Box h="400px"></Box>
-    </div>
+    </Box>
   )
 }
 

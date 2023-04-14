@@ -1,8 +1,7 @@
-import { Flex, Text, Button, Box } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
-import { useState } from 'react'
-import styles from './index.module.scss'
 import LoginComponent from '@/components/login'
+import { Flex, Text } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
 const Tabs = {
   community: 'community',
@@ -10,7 +9,7 @@ const Tabs = {
 }
 
 const Navbar = () => {
-  const [active, setActive] = useState(Tabs.community)
+  const [active, setActive] = useState('community')
   const router = useRouter()
   const onChange = (id: string) => {
     if (id) {
@@ -18,6 +17,12 @@ const Navbar = () => {
     }
     setActive(id)
   }
+
+  useEffect(() => {
+    if (router.pathname) {
+      setActive(router.pathname.replace('/', ''))
+    }
+  }, [router])
 
   return (
     <Flex
