@@ -1,12 +1,15 @@
 import { Box } from '@chakra-ui/react'
-import NavBar from '@/components/navbar'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 function Index() {
-  return (
-    <Box>
-      <NavBar></NavBar>
-    </Box>
-  )
+  const router = useRouter()
+
+  useEffect(() => {
+    router.push('community')
+  }, [router])
+
+  return <Box>index</Box>
 }
 
 export default Index

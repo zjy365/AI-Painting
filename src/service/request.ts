@@ -1,4 +1,5 @@
 import { ApiResp } from '@/interfaces/api'
+import { getToken } from '@/utils/auth'
 import axios, {
   AxiosRequestConfig,
   AxiosResponse,
@@ -6,7 +7,7 @@ import axios, {
 } from 'axios'
 
 const request = axios.create({
-  baseURL: '/',
+  // baseURL:,
   withCredentials: true,
   timeout: 30000,
 })
@@ -16,6 +17,10 @@ request.interceptors.request.use(
   (config: AxiosRequestConfig) => {
     // auto append service prefix
     let _headers: RawAxiosRequestHeaders = config.headers || {}
+
+    if (getToken()) {
+      _headers['jwt-token'] = getToken()
+    }
 
     if (!config.headers || config.headers['Content-Type'] === '') {
       _headers['Content-Type'] = 'application/json'
@@ -34,10 +39,10 @@ request.interceptors.request.use(
 // response interceptor
 request.interceptors.response.use(
   (response: AxiosResponse<ApiResp>) => {
-    const data = response.data as ApiResp
-    if (!data.code || data.code < 200 || data.code > 300) {
-      return Promise.reject(response)
-    }
+    // const data = response.data as ApiResp
+    // if (!data.code || data.code < 200 || data.code > 300) {
+    //   return Promise.reject(response)
+    // }
     return response
   },
   (error) => {
