@@ -21,14 +21,18 @@ const Navbar = () => {
 
   return (
     <Flex
+      position={'fixed'}
+      zIndex={100}
+      top="0"
+      w="100%"
       h={'60px'}
       as="nav"
       align="center"
       justify="space-between"
       wrap="wrap"
-      bg="#2b2b2b"
+      bg="#2d2d2d"
       color="#e6e6e6"
-      borderBottom={'1px solid #404040'}
+      borderBottom={'1px solid #424242'}
       px="60px">
       <Text fontSize="xl" fontWeight="bold">
         AI
@@ -52,9 +56,6 @@ const Navbar = () => {
         </Text>
       </Flex>
       <LoginComponent />
-      {/* <Button colorScheme="blue" size="sm" w="80px" borderRadius={'24px'}>
-        登录
-      </Button> */}
     </Flex>
   )
 }

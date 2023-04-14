@@ -15,11 +15,13 @@ function Layout({ children }: { children: any }) {
     <>
       <NavBar></NavBar>
       <Box
-        bg={'#2b2b2b'}
+        position={'relative'}
+        bg={'#262626'}
         w="100%"
-        h="100%"
-        overflowX={'hidden'}
-        overflowY={'auto'}>
+        h="100vh"
+        pt="61px"
+        // overflowX={'hidden'}
+        overflow={'auto'}>
         {children}
       </Box>
     </>

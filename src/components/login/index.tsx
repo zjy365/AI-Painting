@@ -16,7 +16,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { SetStateAction, useEffect, useState } from 'react'
-import { setToken } from '@/utils/auth'
+import { setToken, removeToken } from '@/utils/auth'
 
 function Login() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -47,15 +47,22 @@ function Login() {
       //@ts-ignore
       let token = res.data['jwt-token']
       setToken(token)
+      onClose()
+      checkLoginStatus()
     } catch (error) {}
   }
+
   const checkLoginStatus = async () => {
     try {
       const res = await request.get('/api/login_status')
-      console.log(res)
       setIsLogin(res.data.loggedIn)
       setUserInfo(res.data.username)
     } catch (error) {}
+  }
+
+  const logOut = () => {
+    removeToken()
+    checkLoginStatus()
   }
 
   useEffect(() => {
@@ -66,22 +73,15 @@ function Login() {
     <>
       {isLogin ? (
         <Menu>
-          <MenuButton as={Button}>Actions</MenuButton>
+          <MenuButton as={Button} justifyContent={'center'}>
+            {userInfo}
+          </MenuButton>
           <MenuList>
-            <MenuItem>Download</MenuItem>
-            <MenuItem>Create a Copy</MenuItem>
-            <MenuItem>Mark as Draft</MenuItem>
-            <MenuItem>Delete</MenuItem>
-            <MenuItem>Attend a Workshop</MenuItem>
+            <MenuItem onClick={logOut}>退出</MenuItem>
           </MenuList>
         </Menu>
       ) : (
-        <Button
-          onClick={onOpen}
-          colorScheme="blue"
-          size="sm"
-          w="80px"
-          borderRadius={'24px'}>
+        <Button onClick={onOpen} size="sm" w="80px" borderRadius={'24px'}>
           登录
         </Button>
       )}
@@ -113,7 +113,7 @@ function Login() {
               m={'30px 5px'}
               w={'100%'}
               borderRadius={'24px'}
-              colorScheme="blue"
+              // colorScheme="blue"
               onClick={handleSubmit}>
               登录
             </Button>
