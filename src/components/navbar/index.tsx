@@ -1,7 +1,19 @@
 import LoginComponent from '@/components/login'
-import { Flex, Text } from '@chakra-ui/react'
+import { useScreen } from '@/hooks/useScreen'
+import { HamburgerIcon } from '@chakra-ui/icons'
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  Flex,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import ImageList from '@/components/imagelist'
 
 const Tabs = {
   community: 'community',
@@ -11,6 +23,8 @@ const Tabs = {
 const Navbar = () => {
   const router = useRouter()
   const [active, setActive] = useState('community')
+  const { isPC } = useScreen()
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   const onChange = (id: string) => {
     if (id) {
@@ -41,10 +55,16 @@ const Navbar = () => {
       bg="#2d2d2d"
       color="#e6e6e6"
       borderBottom={'1px solid #424242'}
-      px="60px">
-      <Text fontSize="xl" fontWeight="bold">
-        AI
-      </Text>
+      pr="40px"
+      pl="24px">
+      {isPC ? (
+        <Text fontSize="xl" fontWeight="bold" onClick={() => router.push('/')}>
+          AI
+        </Text>
+      ) : (
+        <HamburgerIcon w="24px" h="24px" onClick={onOpen} />
+      )}
+
       <Flex cursor={'pointer'}>
         <Text
           px="18px"
@@ -64,6 +84,16 @@ const Navbar = () => {
         </Text>
       </Flex>
       <LoginComponent />
+
+      <Drawer placement={'left'} onClose={onClose} isOpen={isOpen}>
+        <DrawerOverlay />
+        <DrawerContent maxW={'50vw'}>
+          <DrawerHeader borderBottomWidth="1px">Image List</DrawerHeader>
+          <DrawerBody>
+            <ImageList isPhone />
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
     </Flex>
   )
 }

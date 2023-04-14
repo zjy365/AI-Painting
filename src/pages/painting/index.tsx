@@ -1,30 +1,20 @@
+import ImageList from '@/components/imagelist'
+import { useCustomToast } from '@/hooks/useCustomToast'
+import { useScreen } from '@/hooks/useScreen'
 import request from '@/service/request'
-import {
-  Box,
-  Button,
-  Flex,
-  Select,
-  Textarea,
-  Text,
-  Spinner,
-  ListItem,
-  UnorderedList,
-  Link,
-} from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
-import { debounce } from 'lodash'
+import { Box, Button, Flex, Select, Textarea } from '@chakra-ui/react'
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { debounce } from 'lodash'
+import { useState } from 'react'
 
 function Painting() {
   const [prompt, setPrompt] = useState('')
   const [negativePrompt, setNegativePrompt] = useState('')
   const [model, setModel] = useState('None')
+  const { toast } = useCustomToast()
+  const { isPC } = useScreen()
 
   const { data } = useQuery(['getModalList'], () => request('/model_list'))
-
-  const { data: Images } = useQuery(['getImages'], () => request('/images'), {
-    refetchInterval: 10000,
-  })
 
   const onChangePrompt = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPrompt(e.target.value)
@@ -53,12 +43,12 @@ function Painting() {
   }
   const generImage = () => {
     imageMutation.mutate()
+    toast({ title: '已加入队列', status: 'success' })
   }
 
   return (
     <Flex
       h="100%"
-      w="1200px"
       justifyContent={'center'}
       bg={'#262626'}
       pt="61px"
@@ -99,76 +89,7 @@ function Painting() {
           生成
         </Button>
       </Flex>
-      <Flex
-        m="16px"
-        p="24px"
-        w="382px"
-        flexDirection={'column'}
-        bg="primary_black.100"
-        borderWidth={'1px'}
-        borderColor={'primary_black.400'}
-        borderRadius={'16px'}
-        overflowY={'auto'}>
-        <UnorderedList>
-          {Array.isArray(Images?.data) &&
-            Images?.data?.map((item: any) => {
-              return (
-                <ListItem key={item?._id} py="4px">
-                  <Flex alignItems="center">
-                    {item?.status === 'completed' ? (
-                      <Link href={item?.link} isExternal>
-                        {item?.name}
-                      </Link>
-                    ) : (
-                      <Text>{item?.name}</Text>
-                    )}
-
-                    <Box ml="auto">
-                      {item?.status === 'completed' ? (
-                        '✓'
-                      ) : (
-                        <Spinner speed="1s" size={'xs'} />
-                      )}
-                    </Box>
-                  </Flex>
-                </ListItem>
-              )
-            })}
-        </UnorderedList>
-      </Flex>
-      {/* <Flex
-        p={100}
-        flexGrow={1}
-        flexShrink={1}
-        position={'relative'}
-        alignItems="center"
-        justifyContent={'center'}>
-        <Flex
-          maxW={700}
-          maxH={700}
-          minW={200}
-          minH={200}
-          w={'100%'}
-          h={'100%'}
-          alignItems="center"
-          justifyContent={'center'}
-          border={'1px dashed hsla(0,0%,100%,.15)'}>
-          {imageMutation?.data?.data?.image?.status === 'pending' ? (
-            <Spinner thickness="4px" w={'60px'} h={'60px'} speed="1s" />
-          ) : (
-            <Box fontSize={'12px'} color={'white.200'}>
-              快去左侧创造吧
-            </Box>
-          )}
-        </Flex>
-      </Flex>
-      <Flex
-        w="160px"
-        minW="120px"
-        minH={'760px'}
-        borderLeft={'1px solid #424242'}>
-        <Text>记录</Text>
-      </Flex> */}
+      {isPC ? <ImageList /> : null}
     </Flex>
   )
 }
