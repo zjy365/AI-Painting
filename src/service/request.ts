@@ -7,7 +7,7 @@ import axios, {
 } from 'axios'
 
 const request = axios.create({
-  // baseURL: 'https://zbvrsg.laf.dev',
+  baseURL: 'https://zbvrsg.laf.dev',
   withCredentials: true,
   timeout: 30000,
 })
