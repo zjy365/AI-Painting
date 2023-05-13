@@ -1,24 +1,17 @@
-import request from '@/service/request'
-import {
-  Box,
-  Flex,
-  Link,
-  ListItem,
-  Spinner,
-  Text,
-  UnorderedList,
-} from '@chakra-ui/react'
-import { useQuery } from '@tanstack/react-query'
+import request from '@/service/request';
+import { Box, Flex, Link, ListItem, Spinner, Text, UnorderedList } from '@chakra-ui/react';
+import { useQuery } from '@tanstack/react-query';
 
 function ImageList({ isPhone = false }: { isPhone?: boolean }) {
   const { data: Images } = useQuery(['getImages'], () => request('/images'), {
-    refetchInterval: 10000,
-  })
+    refetchInterval: 10000
+  });
+
   if (isPhone) {
     return (
       <UnorderedList>
-        {Array.isArray(Images?.data) &&
-          Images?.data?.map((item: any) => {
+        {Array.isArray(Images?.data?.data) &&
+          Images?.data?.data?.map((item: any) => {
             return (
               <ListItem key={item?._id} py="4px">
                 <Flex alignItems="center">
@@ -31,18 +24,14 @@ function ImageList({ isPhone = false }: { isPhone?: boolean }) {
                   )}
 
                   <Box ml="auto">
-                    {item?.status === 'completed' ? (
-                      '✓'
-                    ) : (
-                      <Spinner speed="1s" size={'xs'} />
-                    )}
+                    {item?.status === 'completed' ? '✓' : <Spinner speed="1s" size={'xs'} />}
                   </Box>
                 </Flex>
               </ListItem>
-            )
+            );
           })}
       </UnorderedList>
-    )
+    );
   }
 
   return (
@@ -55,10 +44,11 @@ function ImageList({ isPhone = false }: { isPhone?: boolean }) {
       borderWidth={'1px'}
       borderColor={'primary_black.400'}
       borderRadius={'16px'}
-      overflowY={'auto'}>
+      overflowY={'auto'}
+    >
       <UnorderedList>
-        {Array.isArray(Images?.data) &&
-          Images?.data?.map((item: any) => {
+        {Array.isArray(Images?.data?.data) &&
+          Images?.data?.data?.map((item: any) => {
             return (
               <ListItem key={item?._id} py="4px">
                 <Flex alignItems="center">
@@ -71,19 +61,15 @@ function ImageList({ isPhone = false }: { isPhone?: boolean }) {
                   )}
 
                   <Box ml="auto">
-                    {item?.status === 'completed' ? (
-                      '✓'
-                    ) : (
-                      <Spinner speed="1s" size={'xs'} />
-                    )}
+                    {item?.status === 'completed' ? '✓' : <Spinner speed="1s" size={'xs'} />}
                   </Box>
                 </Flex>
               </ListItem>
-            )
+            );
           })}
       </UnorderedList>
     </Flex>
-  )
+  );
 }
 
-export default ImageList
+export default ImageList;
